@@ -103,3 +103,69 @@ func TestUnmarshal(t *testing.T) {
 		t.Fatalf("o.Ten should be false")
 	}
 }
+
+type Complex struct {
+	S1 struct {
+		S11 int `env:"s11"`
+	} `env:"s1"`
+
+	S2 *struct {
+		S21 int `env:"s21"`
+	} `env:"s2"`
+
+	S3 struct {
+		S31 int `env:"s31"`
+	}
+
+	S4 *struct {
+		S41 int `env:"s41"`
+	}
+
+	S5 struct {
+		S51 struct {
+			S511 int `env:"s511"`
+		}
+		S52 struct {
+			S521 int `env:"s521"`
+		} `env:"s52"`
+	} `env:"s5"`
+}
+
+func TestComplex(t *testing.T) {
+	c := &Complex{}
+	os.Setenv("s1.s11", "11")
+	os.Setenv("s2.s21", "21")
+	os.Setenv("s31", "31")
+	os.Setenv("s41", "41")
+	os.Setenv("s5.s511", "511")
+	os.Setenv("s5.s52.s521", "521")
+
+	err := Unmarshal(c)
+	if err != nil {
+		t.Fatalf("Unmarshal failed, err: %v", err)
+	}
+
+	if c.S1.S11 != 11 {
+		t.Fatalf("c.S1.S11 should be 11, but: %d", c.S1.S11)
+	}
+
+	if c.S2.S21 != 21 {
+		t.Fatalf("c.S2.S21 should be 21, but: %d", c.S2.S21)
+	}
+
+	if c.S3.S31 != 31 {
+		t.Fatalf("c.S3.S31 should be 31; but: %d", c.S3.S31)
+	}
+
+	if c.S4.S41 != 41 {
+		t.Fatalf("c.S4.S41 should be 41; but: %d", c.S4.S41)
+	}
+
+	if c.S5.S51.S511 != 511 {
+		t.Fatalf("c.S5.S51.S511 should be 511, but: %d", c.S5.S51.S511)
+	}
+
+	if c.S5.S52.S521 != 521 {
+		t.Fatalf("c.S5.S52.S521 should be 521, but: %d", c.S5.S52.S521)
+	}
+}

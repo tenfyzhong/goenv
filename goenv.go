@@ -5,12 +5,17 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 // Unmarshal unmarshal os.env to o
 // o must be point to a struct
 func Unmarshal(o interface{}) error {
 	rv := reflect.ValueOf(o)
+	return unmarshalValue(rv, "")
+}
+
+func unmarshalValue(rv reflect.Value, tagPrefix string) error {
 	if rv.Kind() != reflect.Ptr || rv.IsNil() {
 		return errors.New("must be a pointer")
 	}
@@ -19,7 +24,7 @@ func Unmarshal(o interface{}) error {
 		return errors.New("zero value")
 	}
 
-	t := reflect.TypeOf(o)
+	t := rv.Type()
 	t = t.Elem()
 	v := rv.Elem()
 
@@ -39,8 +44,18 @@ func Unmarshal(o interface{}) error {
 		if !value.CanSet() {
 			continue
 		}
-		name := field.Tag.Get("env")
-		if name == "" {
+		tag := field.Tag.Get("env")
+		name := tag
+		if tagPrefix != "" && tag != "" {
+			name = strings.Join([]string{tagPrefix, tag}, ".")
+		}
+		if tag == "" {
+			if value.Kind() == reflect.Struct {
+				err := unmarshalValue(value.Addr(), tagPrefix)
+				if err != nil {
+					return err
+				}
+			}
 			continue
 		}
 		strValue := os.Getenv(name)
@@ -64,9 +79,15 @@ func Unmarshal(o interface{}) error {
 			if err == nil {
 				value.SetFloat(env)
 			}
+		case reflect.Struct:
+			err := unmarshalValue(value.Addr(), name)
+			if err != nil {
+				return err
+			}
 		default:
 		}
 	}
 
 	return nil
+
 }
