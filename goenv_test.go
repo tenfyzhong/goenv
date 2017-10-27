@@ -188,3 +188,86 @@ func TestDefault(t *testing.T) {
 		t.Fatalf("d1 default is 'd1', but: %s", o.D1)
 	}
 }
+
+type SliceTest struct {
+	Bools    []bool    `env:"bools" envsep:","`
+	Strings  []string  `env:"strings" envsep:","`
+	Ints     []int     `env:"ints" envsep:","`
+	Int8s    []int8    `env:"int8s" envsep:","`
+	Int16s   []int16   `env:"int16s" envsep:","`
+	Int32s   []int32   `env:"int32s" envsep:","`
+	Int64s   []int64   `env:"int64s" envsep:","`
+	Uints    []uint    `env:"uints" envsep:","`
+	Uint8s   []uint8   `env:"uint8s" envsep:","`
+	Uint16s  []uint16  `env:"uint16s" envsep:","`
+	Uint32s  []uint32  `env:"uint32s" envsep:","`
+	Uint64s  []uint64  `env:"uint64s" envsep:","`
+	Float32s []float32 `env:"float32s" envsep:","`
+	Float64s []float64 `env:"float64s"`
+}
+
+func TestSlice(t *testing.T) {
+	o := &SliceTest{}
+	os.Setenv("bools", ",1")
+	os.Setenv("strings", "hello,world")
+	os.Setenv("ints", "1, 2, 3")
+	os.Setenv("int8s", " 1, 2, 3 ")
+	os.Setenv("int16s", " 1, 2,3 ")
+	os.Setenv("int32s", " 1, 2 ,3")
+	os.Setenv("int64s", " 1, 2 ,3")
+	os.Setenv("uints", "1, 2,3")
+	os.Setenv("uint8s", " 1, 2,3 ")
+	os.Setenv("uint16s", " 1, 2,3 ")
+	os.Setenv("uint32s", " 1, 2 ,3")
+	os.Setenv("uint64s", " 1, 2 ,3")
+	os.Setenv("float32s", "1.0,2.0,3")
+	os.Setenv("float64s", "1.0,2.0,3")
+
+	err := Unmarshal(o)
+	if err != nil {
+		t.Fatalf("Unmarshal SliceTest should be success, err: %v", err)
+	}
+
+	if len(o.Bools) != 2 || o.Bools[0] != false || o.Bools[1] != true {
+		t.Fatalf("o.Bools failed, %v", o.Bools)
+	}
+	if len(o.Strings) != 2 || o.Strings[0] != "hello" || o.Strings[1] != "world" {
+		t.Fatalf("o.String failed, %v", o.Strings)
+	}
+	if len(o.Ints) != 3 || o.Ints[0] != 1 || o.Ints[1] != 2 || o.Ints[2] != 3 {
+		t.Fatalf("o.Ints failed, %v", o.Ints)
+	}
+	if len(o.Int8s) != 3 || o.Int8s[0] != 1 || o.Int8s[1] != 2 || o.Int8s[2] != 3 {
+		t.Fatalf("o.Int8s failed, %v", o.Int8s)
+	}
+	if len(o.Int16s) != 3 || o.Int16s[0] != 1 || o.Int16s[1] != 2 || o.Int16s[2] != 3 {
+		t.Fatalf("o.Int16s failed, %v", o.Int16s)
+	}
+	if len(o.Int32s) != 3 || o.Int32s[0] != 1 || o.Int32s[1] != 2 || o.Int32s[2] != 3 {
+		t.Fatalf("o.Int32s failed, %v", o.Int32s)
+	}
+	if len(o.Int64s) != 3 || o.Int64s[0] != 1 || o.Int64s[1] != 2 || o.Int64s[2] != 3 {
+		t.Fatalf("o.Int64s failed, %v", o.Int64s)
+	}
+	if len(o.Uints) != 3 || o.Uints[0] != 1 || o.Uints[1] != 2 || o.Uints[2] != 3 {
+		t.Fatalf("o.Uints failed, %v", o.Uints)
+	}
+	if len(o.Uint8s) != 3 || o.Uint8s[0] != 1 || o.Uint8s[1] != 2 || o.Uint8s[2] != 3 {
+		t.Fatalf("o.Uint8s failed, %v", o.Uint8s)
+	}
+	if len(o.Uint16s) != 3 || o.Uint16s[0] != 1 || o.Uint16s[1] != 2 || o.Uint16s[2] != 3 {
+		t.Fatalf("o.Uint16s failed, %v", o.Uint16s)
+	}
+	if len(o.Uint32s) != 3 || o.Uint32s[0] != 1 || o.Uint32s[1] != 2 || o.Uint32s[2] != 3 {
+		t.Fatalf("o.Uint32s failed, %v", o.Uint32s)
+	}
+	if len(o.Uint64s) != 3 || o.Uint64s[0] != 1 || o.Uint64s[1] != 2 || o.Uint64s[2] != 3 {
+		t.Fatalf("o.Uint64s failed, %v", o.Uint64s)
+	}
+	if len(o.Float32s) != 3 || o.Float32s[0] != 1.0 || o.Float32s[1] != 2.0 || o.Float32s[2] != 3.0 {
+		t.Fatalf("o.Floats failed, %v", o.Float32s)
+	}
+	if len(o.Float64s) != 3 || o.Float64s[0] != 1.0 || o.Float64s[1] != 2.0 || o.Float64s[2] != 3.0 {
+		t.Fatalf("o.Floats failed, %v", o.Float64s)
+	}
+}

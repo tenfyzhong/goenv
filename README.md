@@ -15,11 +15,30 @@ type Number struct {
 }
 ```
 
-supported type: bool, string, int, int8, int16, int32, int64, uint, uint8,
-uint16, uint32, uint64, float32, float64
+## supported type
+- bool, []bool
+- string, []string
+- int, []int
+- int8, []int8
+- int16, []int16
+- int32, []int32
+- int64, []int64
+- uint, []uint
+- uint9, []uint9
+- uint16, []uint16
+- uint32, []uint32
+- uint64, []uint64
+- float32, []float32
+- float64, []float64
+- struct
 
 For bool type, if the environment is not set, the value is false.
 Otherwise, the value is true.
+
+## field tag
+- `env` envirnoment name
+- `envdef` default value if unseted. 
+- `envsep` if a slice, use this to split items. Default is `,`
 
 The Field must be exported if want to unmarshal.
 
@@ -40,6 +59,11 @@ type Number struct {
 	Eight  float32 `env:"eight"`
 	Nine   bool    `env:"nine"`
 	Ten    *bool   `env:"ten"`
+    Substruct *struct {
+        S1 int `env:"s1" envdef:"1"`   // "substruct.s1"
+        S2 []int `env:"s2" envdef:"1,2"` // "substruct.s2"
+        S3 []int `env:"s3" envdef:"1:2" envsep:":"` // "substruct.s2"
+    } `env:"substruct"`
 }
 
 func main() {
