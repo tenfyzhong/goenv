@@ -59,6 +59,9 @@ func unmarshalValue(rv reflect.Value, tagPrefix string) error {
 			continue
 		}
 		strValue := os.Getenv(name)
+		if strValue == "" {
+			strValue = field.Tag.Get("envdef")
+		}
 		switch value.Kind() {
 		case reflect.Bool:
 			value.SetBool(strValue != "")

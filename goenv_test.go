@@ -17,7 +17,7 @@ func TestNil(t *testing.T) {
 
 type Number struct {
 	zero   int    `env:"zero"`
-	One    int    `env:"one"`
+	One    int    `env:"one" envdef:"101"`
 	Two    int    `env:"two"`
 	Three  bool   `env:"three"`
 	Four   string `env:"four"`
@@ -167,5 +167,24 @@ func TestComplex(t *testing.T) {
 
 	if c.S5.S52.S521 != 521 {
 		t.Fatalf("c.S5.S52.S521 should be 521, but: %d", c.S5.S52.S521)
+	}
+}
+
+type DefautltTest struct {
+	D0 int    `env:"d0" envdef:"100"`
+	D1 string `env:"d1" envdef:"d1"`
+}
+
+func TestDefault(t *testing.T) {
+	o := &DefautltTest{}
+	err := Unmarshal(o)
+	if err != nil {
+		t.Fatalf("Unmarshal Number should be success, err: %v", err)
+	}
+	if o.D0 != 100 {
+		t.Fatalf("d0 default is 100, but: %d", o.D0)
+	}
+	if o.D1 != "d1" {
+		t.Fatalf("d1 default is 'd1', but: %s", o.D1)
 	}
 }
