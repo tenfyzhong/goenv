@@ -1,6 +1,8 @@
 # goenv
-[![Build Status](https://travis-ci.org/tenfyzhong/goenv.svg?branch=master)](https://travis-ci.org/tenfyzhong/goenv)
-[![codecov](https://codecov.io/gh/tenfyzhong/goenv/branch/master/graph/badge.svg)](https://codecov.io/gh/tenfyzhong/goenv)
+[![go](https://github.com/tenfyzhong/goenv/actions/workflows/build-test.yml/badge.svg?branch=master)](https://github.com/tenfyzhong/goenv/actions/workflows/build-test.yml)
+[![codecov](https://codecov.io/gh/tenfyzhong/goenv/graph/badge.svg?token=VKDrttr4Ub)](https://codecov.io/gh/tenfyzhong/goenv)
+[![GitHub tag](https://img.shields.io/github/tag/tenfyzhong/goenv.svg)](https://github.com/tenfyzhong/goenv/tags)
+[![Go Reference](https://pkg.go.dev/badge/github.com/tenfyzhong/goenv.svg)](https://pkg.go.dev/github.com/tenfyzhong/goenv)
 
 Unmarshal env to struct. 
 
